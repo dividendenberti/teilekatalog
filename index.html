@@ -746,157 +746,107 @@
 
   .cart-close-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
 
+  /* ── Bestellverlauf ── */
+  #bestellverlauf-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(13,34,87,0.45); backdrop-filter: blur(3px); z-index: 2000;
+  }
+
+  #bestellverlauf-overlay.open { display: block; }
+
+  #bestellverlauf-panel {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 520px; max-width: 100vw; background: #fff;
+    box-shadow: 8px 0 32px rgba(13,34,87,0.2);
+    display: flex; flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2001;
+  }
+
+  #bestellverlauf-panel.open { transform: translateX(0); }
+
+  #bestellverlauf-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+
+  .bv-leer {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; gap: 10px; color: var(--text-light); font-size: 0.82rem;
+    padding: 40px; text-align: center;
+  }
+
+  .bv-leer-icon { font-size: 2.5rem; opacity: 0.4; }
+
+  .bv-loading {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 40px; color: var(--text-light); font-size: 0.8rem;
+  }
+
+  .bv-loading svg { width: 22px; height: 22px; animation: spin 0.8s linear infinite; }
+
+  .bv-order {
+    background: #fff; border: 1.5px solid var(--gray-border); border-radius: var(--radius);
+    margin-bottom: 14px; overflow: hidden; box-shadow: var(--shadow);
+  }
+
+  .bv-order-header {
+    background: var(--navy-light); padding: 9px 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  }
+
+  .bv-order-datum {
+    font-size: 0.78rem; font-weight: 800; color: var(--navy);
+    font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.02em;
+  }
+
+  .bv-order-summe {
+    font-size: 0.78rem; font-weight: 700; color: var(--navy-mid);
+  }
+
+  .bv-order-summe span { font-size: 0.65rem; font-weight: 600; color: var(--text-light); }
+
+  .bv-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; border-top: 1px solid #f0f3fa;
+  }
+
+  .bv-item-info { flex: 1; min-width: 0; }
+
+  .bv-item-name {
+    font-size: 0.79rem; font-weight: 700; color: var(--navy); line-height: 1.3;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .bv-item-meta {
+    font-size: 0.68rem; color: var(--text-light); margin-top: 1px;
+  }
+
+  .bv-item-meta .bv-hersteller { color: var(--orange-dk); font-weight: 700; }
+
+  .bv-item-right { text-align: right; flex-shrink: 0; }
+
+  .bv-item-menge {
+    font-size: 0.68rem; color: var(--text-mid); font-weight: 700; margin-bottom: 2px;
+  }
+
+  .bv-item-preis {
+    font-size: 0.85rem; font-weight: 800; color: var(--navy);
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .bv-item-preis-netto {
+    font-size: 0.62rem; color: var(--text-light); font-weight: 600;
+  }
+
+  .bv-error {
+    padding: 20px; font-size: 0.8rem; color: var(--red); text-align: center;
+  }
+
   .cart-fzg-banner {
     background: var(--navy-light); border-bottom: 1.5px solid #c5d0ee;
     padding: 8px 20px; font-size: 0.72rem; color: var(--navy-mid); font-weight: 700;
     display: flex; align-items: center; gap: 7px; flex-shrink: 0;
   }
 
-  .cart-artnr-search-wrap {
-    padding: 12px 20px;
-    border-bottom: 1.5px solid var(--gray-border);
-    background: var(--navy-light);
-    flex-shrink: 0;
-  }
-
-  .cart-artnr-label {
-    font-size: 0.62rem; font-weight: 800; color: var(--text-light);
-    text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 7px;
-  }
-
-  .cart-artnr-row { display: flex; gap: 7px; align-items: center; }
-
-  .cart-artnr-input-wrap { flex: 1; position: relative; }
-
-  .cart-artnr-input {
-    width: 100%; padding: 9px 34px 9px 11px;
-    border: 1.5px solid var(--gray-border); border-radius: var(--radius);
-    font-size: 0.82rem; font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--text-main); background: #fff; outline: none;
-    transition: border-color 0.15s;
-  }
-
-  .cart-artnr-input::placeholder {
-    text-transform: none; letter-spacing: 0; font-weight: 400;
-    font-family: 'Barlow', sans-serif; color: var(--text-light); font-size: 0.78rem;
-  }
-
-  .cart-artnr-input:focus { border-color: var(--navy-mid); }
-
-  .cart-artnr-clear {
-    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; color: var(--text-light); font-size: 0.85rem;
-    cursor: pointer; display: none; padding: 2px; line-height: 1;
-  }
-
-  .cart-artnr-clear:hover { color: var(--text-main); }
-
-  .cart-artnr-btn {
-    background: var(--orange); border: none; border-radius: var(--radius);
-    padding: 9px 13px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: background 0.15s;
-  }
-
-  .cart-artnr-btn:hover { background: var(--orange-dk); }
-  .cart-artnr-btn:disabled { background: #e0c4b0; cursor: not-allowed; }
-
-  #cart-artnr-result {
-    display: none; margin-top: 10px; background: #fff;
-    border: 1.5px solid var(--gray-border); border-radius: var(--radius);
-    overflow: hidden; box-shadow: 0 4px 16px rgba(13,34,87,0.15);
-    animation: artResultIn 0.2s cubic-bezier(0.34, 1.26, 0.64, 1);
-  }
-
-  @keyframes artResultIn {
-    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  #cart-artnr-result.open { display: block; }
-
-  .artnr-result-inner {
-    display: flex; gap: 11px; align-items: flex-start; padding: 11px 13px;
-  }
-
-  .artnr-result-img {
-    width: 56px; height: 56px; border-radius: 6px;
-    background: #f0f3fa; border: 1px solid var(--gray-border);
-    overflow: hidden; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .artnr-result-img img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
-
-  .artnr-result-img-placeholder {
-    font-size: 0.5rem; color: var(--text-light); text-align: center; padding: 4px;
-  }
-
-  .artnr-result-info { flex: 1; min-width: 0; }
-
-  .artnr-result-supplier {
-    font-size: 0.6rem; font-weight: 800; color: var(--orange);
-    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1px;
-    font-family: 'Barlow Condensed', sans-serif;
-  }
-
-  .artnr-result-name {
-    font-size: 0.82rem; font-weight: 700; color: var(--navy);
-    line-height: 1.25; margin-bottom: 2px; font-family: 'Barlow Condensed', sans-serif;
-  }
-
-  .artnr-result-nr {
-    font-size: 0.65rem; color: var(--text-light);
-    font-family: 'Courier New', monospace; margin-bottom: 5px;
-  }
-
-  .artnr-result-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
-  .artnr-result-preis {
-    font-size: 1rem; font-weight: 800; color: var(--navy);
-    font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.02em;
-  }
-
-  .artnr-result-preis span { font-size: 0.7rem; font-weight: 600; color: var(--text-light); }
-
-  .artnr-lager-dot {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 0.7rem; font-weight: 700;
-  }
-
-  .artnr-lager-dot::before {
-    content: ''; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-  }
-
-  .artnr-lager-dot.auf  { color: var(--green); }
-  .artnr-lager-dot.auf::before  { background: var(--green); box-shadow: 0 0 4px rgba(29,158,78,0.4); }
-  .artnr-lager-dot.kein { color: var(--red); }
-  .artnr-lager-dot.kein::before { background: var(--red); }
-
-  .artnr-add-btn {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--green); border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; flex-shrink: 0;
-    transition: background 0.15s, transform 0.12s;
-    align-self: center; box-shadow: 0 2px 8px rgba(29,158,78,0.25);
-  }
-
-  .artnr-add-btn:hover { background: #178a43; transform: scale(1.1); }
-  .artnr-add-btn.added { background: var(--navy); }
-
-  .artnr-result-error {
-    padding: 13px 16px; font-size: 0.77rem; color: var(--red);
-    display: flex; align-items: center; gap: 8px;
-  }
-
-  .artnr-result-loading {
-    padding: 13px 16px; font-size: 0.77rem; color: var(--text-light);
-    display: flex; align-items: center; gap: 8px;
-  }
-
-  .artnr-result-loading svg { width: 16px; height: 16px; animation: spin 0.8s linear infinite; flex-shrink: 0; }
 
   .cart-items-list { flex: 1; overflow-y: auto; padding: 12px 0; }
 
@@ -1364,6 +1314,14 @@
       <span class="cart-badge" id="cart-badge">0</span>
     </button>
 
+    <button class="cart-topbar-btn" onclick="bestellverlaufOeffnen()" title="Bestellverlauf anzeigen">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="2"></circle>
+        <path d="M12 7v5l3.5 2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Bestellverlauf</span>
+    </button>
+
     <div id="logout-bereich" style="display:none;">
       <span id="logout-username"></span>
       <button id="logout-btn" onclick="logoutDurchfuehren()" title="Abmelden">
@@ -1598,22 +1556,6 @@
     <span id="cart-fzg-txt"></span>
   </div>
 
-  <div class="cart-artnr-search-wrap">
-    <div class="cart-artnr-label">Artikelnummer direkt suchen</div>
-    <div class="cart-artnr-row">
-      <div class="cart-artnr-input-wrap">
-        <input type="text" class="cart-artnr-input" id="cart-artnr-input" placeholder="z.B. W 719/30" maxlength="40" autocomplete="off">
-        <button class="cart-artnr-clear" id="cart-artnr-clear" onclick="cartArtnrClear()">✕</button>
-      </div>
-      <button class="cart-artnr-btn" id="cart-artnr-btn" onclick="cartArtnrSuchen()" title="Artikel suchen">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-          <circle cx="11" cy="11" r="7" stroke="#fff" stroke-width="2.2"></circle>
-          <path d="M20 20l-3.5-3.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"></path>
-        </svg>
-      </button>
-    </div>
-    <div id="cart-artnr-result"></div>
-  </div>
 
   <div class="cart-items-list" id="cart-items-list">
     <div class="cart-empty">
@@ -1638,6 +1580,19 @@
       Bestellung absenden
     </button>
   </div>
+</div>
+
+<div id="bestellverlauf-overlay" onclick="bestellverlaufSchliessen(event)"></div>
+<div id="bestellverlauf-panel">
+  <div class="cart-panel-header">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="2"></circle>
+      <path d="M12 7v5l3.5 2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <span class="cart-panel-title">Bestellverlauf</span>
+    <button class="cart-close-btn" onclick="bestellverlaufZu()">✕</button>
+  </div>
+  <div id="bestellverlauf-body"></div>
 </div>
 
 <div id="modal-overlay" onclick="modalSchliessen(event)">
@@ -1692,8 +1647,8 @@ const WH_MANUFACTURERS = "https://nachtn.widhalm-handel.at/webhook/fe4a33dc-234e
 const WH_MODELS        = "https://nachtn.widhalm-handel.at/webhook/450da129-dae6-4c56-a2cf-bb9ac7ddf89e";
 const WH_VEHICLES      = "https://nachtn.widhalm-handel.at/webhook/34b1085a-fb50-4477-87d3-e92ff773e1a2";
 const WH_WARENKORB     = "https://nachtn.widhalm-handel.at/webhook/2699b517-af1d-494d-9cdb-2b6c82b8e147";
-const WH_ARTNUMMER     = "https://nachtn.widhalm-handel.at/webhook/iamnummer";
 const WH_ARTNR_SUCHE   = "https://nachtn.widhalm-handel.at/webhook/67decef6-02f4-448c-b96d-5d9e0de1267e";
+const WH_BESTELLVERLAUF = "https://nachtn.widhalm-handel.at/webhook/b283672c-d249-4e77-ac75-a1196d8f0364";
 
 // ════════════════════════════════════════════════════════════
 // LOGIN
@@ -2002,6 +1957,7 @@ async function bestellungAbsenden() {
     warenkorb = [];
     cartSpeichern();
     cartBadgeUpdate();
+    bestellverlaufGeladen = false;
   } catch(err) {
     btn.disabled = false;
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22l-4-9-9-4 20-7z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Bestellung absenden';
@@ -2702,12 +2658,6 @@ document.addEventListener("DOMContentLoaded", () => {
   inp.addEventListener("focus", () => { if (supListe.length) { renderSupDropdown(inp.value); dd.classList.add("open"); } });
   inp.addEventListener("input", () => { clr.style.display = inp.value ? "block" : "none"; renderSupDropdown(inp.value); dd.classList.add("open"); });
   document.addEventListener("click", e => { if (!document.getElementById("sup-search-wrap").contains(e.target)) dd.classList.remove("open"); });
-  const artInp = document.getElementById('cart-artnr-input');
-  artInp.addEventListener('keydown', e => { if (e.key === 'Enter') cartArtnrSuchen(); });
-  artInp.addEventListener('input', function() {
-    document.getElementById('cart-artnr-clear').style.display = this.value ? 'block' : 'none';
-    if (!this.value) cartArtnrResultLeeren();
-  });
 });
 
 // ════════════════════════════════════════════════════════════
@@ -3044,108 +2994,105 @@ function getYear(d)          { return d ? d.split('-')[0] : ''; }
 function cleanNum(n)         { return n ? parseFloat(n).toString() : ''; }
 
 // ════════════════════════════════════════════════════════════
-// ARTIKELNUMMER-SUCHE IM WARENKORB
+// BESTELLVERLAUF
 // ════════════════════════════════════════════════════════════
-let cartArtnrAktuellerArtikel = null;
+let bestellverlaufGeladen = false;
 
-function cartArtnrClear() {
-  document.getElementById('cart-artnr-input').value = '';
-  document.getElementById('cart-artnr-clear').style.display = 'none';
-  cartArtnrResultLeeren();
-  document.getElementById('cart-artnr-input').focus();
+function bestellverlaufOeffnen() {
+  document.getElementById('bestellverlauf-overlay').classList.add('open');
+  document.getElementById('bestellverlauf-panel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (!bestellverlaufGeladen) bestellverlaufLaden();
 }
 
-function cartArtnrResultLeeren() {
-  const r = document.getElementById('cart-artnr-result');
-  r.className = ''; r.style.display = 'none'; cartArtnrAktuellerArtikel = null;
+function bestellverlaufZu() {
+  document.getElementById('bestellverlauf-overlay').classList.remove('open');
+  document.getElementById('bestellverlauf-panel').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
-async function cartArtnrSuchen() {
-  const inp = document.getElementById('cart-artnr-input');
-  const q   = inp.value.trim(); if (!q) { inp.focus(); return; }
-  const btn    = document.getElementById('cart-artnr-btn');
-  const result = document.getElementById('cart-artnr-result');
-  btn.disabled = true; result.style.display = 'block'; result.className = 'open';
-  result.innerHTML = '<div class="artnr-result-loading"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#e8edf8" stroke-width="3"/><path d="M12 2a10 10 0 0 1 10 10" stroke="#f47920" stroke-width="3" stroke-linecap="round"/></svg>Suche nach &bdquo;' + q + '&ldquo;…</div>';
+function bestellverlaufSchliessen(e) {
+  if (e.target === document.getElementById('bestellverlauf-overlay')) bestellverlaufZu();
+}
+
+function bvFmtDatum(iso) {
+  if (!iso) return '–';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  const pad = n => String(n).padStart(2, '0');
+  return pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.' + d.getFullYear() + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+
+function bvFmtPreis(n) {
+  return parseFloat(n || 0).toFixed(2).replace('.', ',');
+}
+
+async function bestellverlaufLaden() {
+  const body = document.getElementById('bestellverlauf-body');
+  body.innerHTML = '<div class="bv-loading"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#e8edf8" stroke-width="3"/><path d="M12 2a10 10 0 0 1 10 10" stroke="#f47920" stroke-width="3" stroke-linecap="round"/></svg>Bestellverlauf wird geladen…</div>';
 
   try {
-    const res = await fetch(WH_ARTNUMMER, { method: 'POST', headers: WEBHOOK_HEADERS, body: JSON.stringify({ artikelnummer: q }) });
+    const res = await fetch(WH_BESTELLVERLAUF, {
+      method: 'POST',
+      headers: WEBHOOK_HEADERS,
+      body: JSON.stringify({ benutzer: eingeloggterBenutzer })
+    });
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const text = await res.text();
-    if (!text || !text.trim()) { result.innerHTML = '<div class="artnr-result-error"><span style="font-size:1.1rem;">&#128269;</span>Keine Artikel für &bdquo;' + q + '&ldquo; gefunden.</div>'; btn.disabled = false; return; }
-    let data; try { data = JSON.parse(text); } catch(e) { result.innerHTML = '<div class="artnr-result-error">Keine Artikel gefunden.</div>'; btn.disabled = false; return; }
+    const data  = await res.json();
+    const liste = Array.isArray(data) ? data : [data];
 
-    // Array hat zwei Typen von Einträgen:
-    // 1) Preis/Lager-Eintrag: hat "id", "artikelnr", "einkaufspreis", "lagerstand"
-    // 2) Bild-Eintrag: hat "s3image", "articleMediaType"
-    const liste      = Array.isArray(data) ? data : [data];
-    const eintrag    = liste.find(e => e.id && e.artikelnr) || liste.find(e => parseFloat(e.lagerstand || 0) >= 0 && e.id);
-    const bildEintrag = liste.find(e => e.s3image);
+    bestellverlaufGeladen = true;
 
-    if (!eintrag || !eintrag.id) {
-      result.innerHTML = '<div class="artnr-result-error"><span style="font-size:1.1rem;">&#128269;</span>Keine Artikel für &bdquo;' + q + '&ldquo; gefunden.</div>';
-      btn.disabled = false; return;
+    if (!liste.length) {
+      body.innerHTML = '<div class="bv-leer"><div class="bv-leer-icon">📋</div><div>Noch keine Bestellungen vorhanden</div></div>';
+      return;
     }
 
-    cartArtnrAktuellerArtikel = {
-      item_id:    eintrag.id,
-      articleNo:  eintrag.artikelnr || q,
-      name:       eintrag.name || (eintrag.hersteller_name || '') + ' ' + (eintrag.artikelnr || q),
-      lieferant:  eintrag.hersteller_name || '–',
-      supplierId: eintrag.hersteller_einspeisenr,
-      lagerstand: parseFloat(eintrag.lagerstand || 0),
-      preis:      parseFloat(eintrag.einkaufspreis || 0),
-      pfand:      eintrag.pfand ? parseFloat(eintrag.pfand) : null,
-      mindestmenge: parseInt(eintrag.mindestmenge || 1, 10) || 1,
-      bild:       bildEintrag?.s3image || eintrag.s3image || null
-    };
-    cartArtnrErgebnisRendern(cartArtnrAktuellerArtikel);
+    // Nach createdAt gruppieren — Einträge mit identischem Zeitstempel gehören zur selben Bestellung
+    const gruppen = new Map();
+    liste.forEach(item => {
+      const key = item.createdAt || 'unbekannt';
+      if (!gruppen.has(key)) gruppen.set(key, []);
+      gruppen.get(key).push(item);
+    });
+
+    // Neueste Bestellung zuerst
+    const sortierteKeys = [...gruppen.keys()].sort((a, b) => new Date(b) - new Date(a));
+
+    body.innerHTML = '';
+    sortierteKeys.forEach(key => {
+      const items = gruppen.get(key);
+      const summe = items.reduce((s, it) => s + (parseFloat(it.preisbrutto || 0) * parseInt(it.menge || 1, 10)), 0);
+
+      const order = document.createElement('div');
+      order.className = 'bv-order';
+
+      let html = '<div class="bv-order-header">' +
+        '<div class="bv-order-datum">' + bvFmtDatum(key) + '</div>' +
+        '<div class="bv-order-summe"><span>Summe </span>€ ' + bvFmtPreis(summe) + '</div>' +
+        '</div>';
+
+      items.forEach(it => {
+        html += '<div class="bv-item">' +
+          '<div class="bv-item-info">' +
+            '<div class="bv-item-name">' + (it.bezeichnung || '–') + '</div>' +
+            '<div class="bv-item-meta"><span class="bv-hersteller">' + (it.hersteller || '–') + '</span> · ' + (it.artikelnummer || '–') + '</div>' +
+          '</div>' +
+          '<div class="bv-item-right">' +
+            '<div class="bv-item-menge">' + (it.menge || 1) + ' Stk</div>' +
+            '<div class="bv-item-preis">€ ' + bvFmtPreis(it.preisbrutto) + '</div>' +
+            '<div class="bv-item-preis-netto">netto € ' + bvFmtPreis(it.preisnetto) + '</div>' +
+          '</div>' +
+        '</div>';
+      });
+
+      order.innerHTML = html;
+      body.appendChild(order);
+    });
+
   } catch(err) {
-    result.innerHTML = '<div class="artnr-result-error"><span style="font-size:1.1rem;">&#9888;</span>Fehler beim Abrufen. Bitte erneut versuchen.</div>';
+    body.innerHTML = '<div class="bv-error">Fehler beim Laden des Bestellverlaufs: ' + err.message + '</div>';
   }
-  btn.disabled = false;
-}
-
-function cartArtnrErgebnisRendern(art) {
-  const result = document.getElementById('cart-artnr-result');
-  const lager  = parseFloat(art.lagerstand || 0);
-  const preis  = parseFloat(art.preis || 0);
-  const artId  = String(art.item_id || art.articleNo);
-  const bereitsImKorb = warenkorb.some(x => x.articleId === artId);
-
-  result.innerHTML = '<div class="artnr-result-inner"><div class="artnr-result-img">' +
-    (art.bild ? '<img src="' + art.bild + '" alt="' + (art.name||'') + '" onerror="this.parentNode.innerHTML=\'<div class=artnr-result-img-placeholder>Kein Bild</div>\'">' : '<div class="artnr-result-img-placeholder">Kein Bild</div>') +
-    '</div><div class="artnr-result-info">' +
-    '<div class="artnr-result-supplier">' + (art.lieferant || '–') + '</div>' +
-    '<div class="artnr-result-name">' + (art.name || '–') + '</div>' +
-    '<div class="artnr-result-nr">' + (art.articleNo || '–') + '</div>' +
-    '<div class="artnr-result-meta">' +
-    (preis > 0 ? '<div class="artnr-result-preis"><span>\u20AC </span>' + preis.toFixed(2).replace('.', ',') + '</div>' : '') +
-    '<div class="artnr-lager-dot ' + (lager > 0 ? 'auf' : 'kein') + '">' + (lager > 0 ? Math.floor(lager) + ' Stk verfügbar' : 'Nicht lagernd') + '</div>' +
-    '</div></div>' +
-    '<button class="artnr-add-btn ' + (bereitsImKorb ? 'added' : '') + '" id="artnr-add-btn" title="' + (bereitsImKorb ? 'Bereits im Warenkorb' : 'In den Warenkorb') + '" onclick="cartArtnrHinzufuegen()">' +
-    (bereitsImKorb
-      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>') +
-    '</button></div>';
-}
-
-function cartArtnrHinzufuegen() {
-  const art = cartArtnrAktuellerArtikel; if (!art) return;
-  const artObjekt = {
-    articleId:          art.item_id,
-    articleNo:          art.articleNo,
-    articleProductName: art.name,
-    supplierName:       art.lieferant,
-    supplierId:         art.supplierId,
-    _item_id:           art.item_id,
-    _mindestmenge:      art.mindestmenge || 1,
-    _pfand:             art.pfand || null,
-    s3image:            art.bild || null
-  };
-  cartArtikelHinzufuegen(artObjekt, parseFloat(art.preis) || 0, null);
-  const btn = document.getElementById('artnr-add-btn');
-  if (btn) { btn.classList.add('added'); btn.title = 'Bereits im Warenkorb'; btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; }
 }
 
 // ════════════════════════════════════════════════════════════
